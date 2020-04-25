@@ -1,6 +1,6 @@
 # Javascript Slot Machine
 
-![slotmachine](https://user-images.githubusercontent.com/63679316/80284517-035cb580-86ed-11ea-9636-0f05e58388a4.png width="100")
+![slotmachine](https://user-images.githubusercontent.com/63679316/80284517-035cb580-86ed-11ea-9636-0f05e58388a4.png)
 
 Contributors:
 https://github.com/tognee
