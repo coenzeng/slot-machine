@@ -1,0 +1,159 @@
+<!DOCTYPE html>
+<head>
+    <title>Slot Machine</title>
+    <link rel="stylesheet" type="text/css" href="css/browser_reset.css">
+	<link rel="stylesheet" type="text/css" href="css/main.css">
+</head>
+<html>
+<body>
+<main>
+	<div class="status" id="status">SPIN TO WIN!</div>
+	<div class="slots">
+		<div id="slot1" class="a1"></div>
+		<div id="slot2" class="a1"></div>
+		<div id="slot3" class="a1"></div>
+    </div>
+	<button type="submit" value="Submit" class="button"  onclick="return gamble(y)" style="vertical-align:middle"><span>SPIN</span></button>
+   
+<div>
+	<input type="image" src="images/20pokerchip.png" onCLick="addbet(20)" class="pokerchip" alt="20 poker chip" width="150" height=auto>
+	<input type="image" src="images/50pokerchip.png" onCLick="addbet(50)" class="pokerchip" alt="50 poker chip" width="150" height=auto>
+	<input type="image" src="images/100pokerchip.png" onCLick="addbet(100)" class="pokerchip" alt="100 poker chip" width="150" height=auto>
+	
+</div>
+
+<div class="status">
+<table>
+	<tr>
+		<td id="message1">Money: $1000</td>
+		<td id="message2">Now Betting: $0</td>
+    </tr>
+	</table>
+</div>
+</main>
+
+<script>
+var action = false;
+let status = document.getElementById("status")
+var x = 1000;
+var y = 0;
+
+function addbet(amount){
+
+	if (y > x) {
+		y = 0;
+		document.getElementById("status").innerHTML = "Not enough funds."
+	} else {
+		
+		if (amount == "20") { 
+			y = y + 20;
+		} else if (amount == "50"){
+			y = y + 50;
+		} else if (amount == "100"){
+			y = y + 100;
+		}
+	}
+		document.getElementById("message2").innerHTML = "Now Betting: $" + y
+		return y
+	}
+
+function gamble(y){
+	if (action){return null;}
+	action = true;
+
+	if (y > x) {
+		document.getElementById("status").innerHTML = "Not enough funds."
+		y = 0;
+		document.getElementById("message2").innerHTML =  "Now Betting: $" + y
+		action = false;
+		return y
+	}else{
+		var numChanges = randomInt(1,4)*7
+		var numberSlot1 = numChanges+randomInt(1,7)
+		var numberSlot2 = numChanges+2*7+randomInt(1,7)
+		var numberSlot3 = numChanges+4*7+randomInt(1,7)
+
+		var i1 = 0;
+		var i2 = 0;
+		var i3 = 0;
+		status.innerHTML = "SPINNING"
+		slot1 = setInterval(spin1, 50);
+		slot2 = setInterval(spin2, 50);
+		slot3 = setInterval(spin3, 50);
+	}
+
+	function spin1(){
+		i1++;
+		if (i1>=numberSlot1){
+			clearInterval(slot1);
+			return null;
+		}
+		slotTile = document.getElementById("slot1");
+		if (slotTile.className=="a7"){
+			slotTile.className = "a0";
+		}
+		slotTile.className = "a"+(parseInt(slotTile.className.substring(1))+1)
+	}
+	function spin2(){
+		i2++;
+		if (i2>=numberSlot2){
+			
+			clearInterval(slot2);
+			return null;
+		}
+		slotTile = document.getElementById("slot2");
+		if (slotTile.className=="a7"){
+			slotTile.className = "a0";
+		}
+		slotTile.className = "a"+(parseInt(slotTile.className.substring(1))+1)
+	}
+	function spin3(){
+		i3++;
+		if (i3>=numberSlot3){
+			
+			clearInterval(slot3);
+			testWin();
+			return null;
+		}
+		slotTile = document.getElementById("slot3");
+		if (slotTile.className=="a7"){
+			slotTile.className = "a0";
+		}
+
+		slotTile.className = "a"+(parseInt(slotTile.className.substring(1))+1)
+	}
+}
+
+function testWin(){
+	var slot1 = document.getElementById("slot1").className
+	var slot2 = document.getElementById("slot2").className
+	var slot3 = document.getElementById("slot3").className
+
+	if (((slot1 == slot2 && slot2 == slot3) ||
+		(slot1 == slot2 && slot3 == "a7") ||
+		(slot1 == slot3 && slot2 == "a7") ||
+		(slot2 == slot3 && slot1 == "a7") ||
+		(slot1 == slot2 && slot1 == "a7") ||
+		(slot1 == slot3 && slot1 == "a7") ||
+		(slot2 == slot3 && slot2 == "a7") ) && !(slot1 == slot2 && slot2 == slot3 && slot1=="a7")){
+		status.innerHTML = "YOU WIN!";
+		var result = ~y + 1; //negative value
+		
+	}else{
+		status.innerHTML = "YOU LOSE!"
+		var result = y; //positive value
+	}
+	x = x - result;
+	if (x <= 0) { 
+			x = 0;
+	}
+	document.getElementById("message1").innerHTML = "Money: $" + x	
+	action = false;
+}
+
+function randomInt(min, max){
+	return Math.floor((Math.random() * (max-min+1)) + min);
+}
+</script>
+</body>
+</html>
